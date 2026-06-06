@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YULDUZLAR - 80 ta Sara Artistlar Bazasi</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome (Ikonkalar uchun) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-white min-h-screen flex flex-col justify-between">
+
+    <!-- NAV BAR (Navigatsiya) -->
+    <nav class="bg-slate-900/80 backdrop-blur-md border-b border-slate-800 sticky top-0 z-50 py-4">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+            <a href="#" class="text-2xl font-extrabold tracking-wider text-amber-500 flex items-center gap-2">
+                <i class="fa-solid fa-star animate-pulse"></i> YULDUZLAR
+            </a>
+            
+            <div class="flex items-center gap-4" id="nav-auth-buttons">
+                <button onclick="openModal('loginModal')" class="px-5 py-2.5 rounded-xl border border-amber-500 text-amber-500 font-bold hover:bg-amber-500 hover:text-slate-950 transition duration-300">
+                    Kirish
+                </button>
+                <button onclick="openModal('registerModal')" class="px-5 py-2.5 rounded-xl bg-amber-500 text-slate-950 font-bold hover:bg-amber-400 transition duration-300 shadow-lg shadow-amber-500/20">
+                    Ro'yxatdan O'tish
+                </button>
+            </div>
+
+            <div class="hidden flex items-center gap-4" id="nav-user-profile">
+                <span class="text-slate-300 font-bold flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                    Salom, <span id="user-display-name" class="text-white text-lg font-extrabold">Foydalanuvchi</span>!
+                </span>
+                <button onclick="logout()" class="px-4 py-2 rounded-xl bg-red-600/20 hover:bg-red-600 text-red-400 hover:text-white font-bold border border-red-500/30 transition duration-300">
+                    <i class="fa-solid fa-right-from-bracket"></i> Chiqish
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO BANNER -->
+    <header class="relative overflow-hidden py-20 px-4">
+        <div class="absolute inset-0 bg-gradient-to-b from-amber-500/5 via-transparent to-transparent"></div>
+        <div class="max-w-5xl mx-auto text-center relative z-10">
+            <span class="px-4 py-2 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-sm font-bold tracking-wide uppercase mb-6 inline-block">
+                O'zbekistondagi Eng Ulkan To'y Platformasi
+            </span>
+            <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight mb-6">
+                To'yingiz uchun <br>
+                <span class="bg-gradient-to-r from-amber-400 to-yellow-600 bg-clip-text text-transparent">80 ta Eng Sara Artistlar</span>
+            </h1>
+            <p class="text-lg sm:text-xl text-slate-400 font-bold max-w-3xl mx-auto mb-8">
+                Tizimimiz kengaytirildi! Endilikda 80 ta eng mashhur o'zbek san'atkorlari, xonandalar, guruhlar va professional boshlovchilar to'g'ridan-to'g'ri xizmatlariga buyurtma bering.
+            </p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="#artists-section" class="px-8 py-4 rounded-2xl bg-amber-500 text-slate-950 font-extrabold text-lg hover:bg-amber-400 transition duration-300 shadow-xl shadow-amber-500/30">
+                    Kengaytirilgan Bazani Ko'rish
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN SECTION -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-20 flex-grow w-full" id="artists-section">
+        
+        <!-- MEHMONLAR UCHUN QULFLANGAN HOLAT -->
+        <div id="locked-state" class="bg-slate-900/60 border border-slate-800 rounded-3xl p-8 sm:p-12 text-center my-10 backdrop-blur-sm max-w-4xl mx-auto">
+            <div class="w-20 h-20 bg-amber-500/10 border border-amber-500/20 text-amber-500 text-4xl rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <i class="fa-solid fa-lock animate-bounce"></i>
+            </div>
+            <h2 class="text-3xl font-extrabold mb-4 text-white">80 ta Artist ro'yxati faqat a'zolar uchun!</h2>
+            <p class="text-slate-400 text-lg font-bold mb-8 max-w-xl mx-auto">
+                O'zbek shou-biznesining 80 ta eng oldi vakillari rasmlarini ko'rish, narxlar bilan tanishish va to'yga buyurtma berish uchun bepul a'zo bo'ling.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <button onclick="openModal('registerModal')" class="px-8 py-4 rounded-xl bg-amber-500 text-slate-950 font-extrabold text-md hover:bg-amber-400 transition duration-300">
+                    <i class="fa-solid fa-user-plus mr-2"></i> Bevosita Ro'yxatdan O'tish
+                </button>
+                <button onclick="openModal('loginModal')" class="px-8 py-4 rounded-xl border border-slate-700 text-white font-bold hover:bg-slate-800 transition duration-300">
+                    Akkauntga Kirish
+                </button>
+            </div>
+        </div>
+
+        <!-- TIZIMGA KIRGANDAN KEYINGI OCHIQ HOLAT -->
+        <div id="unlocked-state" class="hidden space-y-8">
+            
+            <!-- Qidiruv va Filtr paneli -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col md:flex-row gap-4 justify-between items-center">
+                <div class="relative w-full md:w-96">
+                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-4 text-slate-400"></i>
+                    <input type="text" id="search-input" oninput="filterAndSearchArtists()" placeholder="80 ta artist ichidan qidirish..." class="w-full bg-slate-950 border border-slate-700 rounded-xl pl-12 pr-4 py-3 text-white font-bold placeholder-slate-400 focus:outline-none focus:border-amber-500">
+                </div>
+                
+                <div class="flex flex-wrap gap-2 w-full md:w-auto justify-start md:justify-end">
+                    <button onclick="setFilter('barchasi')" class="category-btn active px-4 py-2 rounded-xl text-sm font-extrabold bg-amber-500 text-slate-950 transition">Barchasi (80)</button>
+                    <button onclick="setFilter('estrada')" class="category-btn px-4 py-2 rounded-xl text-sm font-extrabold bg-slate-850 hover:bg-slate-800 text-slate-300 transition">Estrada</button>
+                    <button onclick="setFilter('mumtoz')" class="category-btn px-4 py-2 rounded-xl text-sm font-extrabold bg-slate-850 hover:bg-slate-800 text-slate-300 transition">Mumtoz</button>
+                    <button onclick="setFilter('pop')" class="category-btn px-4 py-2 rounded-xl text-sm font-extrabold bg-slate-850 hover:bg-slate-800 text-slate-300 transition">Pop</button>
+                    <button onclick="setFilter('boshlovchi')" class="category-btn px-4 py-2 rounded-xl text-sm font-extrabold bg-slate-850 hover:bg-slate-800 text-slate-300 transition">Boshlovchilar</button>
+                </div>
+            </div>
+
+            <!-- Artistlar Grid tizimi -->
+            <div id="artists-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <!-- Dinamik ravishda 80 ta artist kartochkalari yuklanadi -->
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-950 border-t border-slate-900 py-8 text-center text-slate-500 font-bold mt-auto">
+        <div class="max-w-7xl mx-auto px-4">
+            <p class="text-amber-500/80 mb-2 text-lg">YULDUZLAR ULKAN PLATFORMASI</p>
+            <p class="text-sm">&copy; 2026 To'ylar va Marosimlar uchun Shaxsiy Bron Tizimi. Barcha huquqlar himoyalangan.</p>
+        </div>
+    </footer>
+
+    <!-- MODAL 1: RO'YXATDAN O'TISH -->
+    <div id="registerModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white text-slate-950 rounded-3xl max-w-md w-full p-8 relative shadow-2xl border border-slate-200">
+            <button onclick="closeModal('registerModal')" class="absolute top-4 right-4 text-slate-500 hover:text-slate-900 text-2xl">
+                <i class="fa-solid fa-circle-xmark"></i>
+            </button>
+            <div class="text-center mb-6">
+                <h3 class="text-3xl font-extrabold text-slate-900">Profil ochish</h3>
+                <p class="text-slate-600 font-bold mt-1">Sizga 80 ta professional artistlar ro'yxati ochiladi!</p>
+            </div>
+            <form onsubmit="handleAuth(event, 'register')">
+                <div class="mb-4">
+                    <label class="block text-slate-800 font-bold mb-2">To'liq ismingiz</label>
+                    <input type="text" id="reg-name" required class="w-full px-4 py-3 bg-slate-100 border border-slate-300 rounded-xl text-slate-950 font-bold focus:outline-none focus:ring-2 focus:ring-amber-500" placeholder="Ismingizni yozing">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-slate-800 font-bold mb-2">Telefon raqam</label>
+                    <input type="tel" id="reg-phone" required class="w-full px-4 py-3 bg-slate-100 border border-slate-300 rounded-xl text-slate-950 font-bold focus:outline-none focus:ring-2 focus:ring-amber-500" placeholder="+998">
+                </div>
+                <div class="mb-6">
+                    <label class="block text-slate-800 font-bold mb-2">Parol yarating</label>
+                    <input type="password" id="reg-pass" required class="w-full px-4 py-3 bg-slate-100 border border-slate-300 rounded-xl text-slate-950 font-bold focus:outline-none focus:ring-2 focus:ring-amber-500" placeholder="Kamida 4 ta belgi">
+                </div>
+                <button type="submit" class="w-full py-4 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-lg transition shadow-lg">
+                    Ro'yxatdan o'tish va Kirish
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL 2: TIZIMGA KIRISH -->
+    <div id="loginModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white text-slate-950 rounded-3xl max-w-md w-full p-8 relative shadow-2xl border border-slate-200">
+            <button onclick="closeModal('loginModal')" class="absolute top-4 right-4 text-slate-500 hover:text-slate-900 text-2xl">
+                <i class="fa-solid fa-circle-xmark"></i>
+            </button>
+            <div class="text-center mb-6">
+                <h3 class="text-3xl font-extrabold text-slate-900">Profilga kirish</h3>
+                <p class="text-slate-600 font-bold mt-1">Platformaga kirib to'yni rejalashtirishda davom eting</p>
+            </div>
+            <form onsubmit="handleAuth(event, 'login')">
+                <div class="mb-4">
+                    <label class="block text-slate-800 font-bold mb-2">Telefon raqam</label>
+                    <input type="tel" id="login-phone" required class="w-full px-4 py-3 bg-slate-100 border border-slate-300 rounded-xl text-slate-950 font-bold focus:outline-none focus:ring-2 focus:ring-amber-500" placeholder="+998">
+                </div>
+                <div class="mb-6">
+                    <label class="block text-slate-800 font-bold mb-2">Parol</label>
+                    <input type="password" id="login-pass" required class="w-full px-4 py-3 bg-slate-100 border border-slate-300 rounded-xl text-slate-950 font-bold focus:outline-none focus:ring-2 focus:ring-amber-500" placeholder="Parolingiz">
+                </div>
+                <button type="submit" class="w-full py-4 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-lg transition shadow-lg">
+                    Tizimga Kirish
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL 3: TO'YGA BRON QILISH -->
+    <div id="bookingModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white text-slate-950 rounded-3xl max-w-md w-full p-8 relative shadow-2xl border border-slate-200">
+            <button onclick="closeModal('bookingModal')" class="absolute top-4 right-4 text-slate-500 hover:text-slate-900 text-2xl">
+                <i class="fa-solid fa-circle-xmark"></i>
+            </button>
+            <div class="text-center mb-6">
+                <h3 class="text-2xl font-extrabold text-slate-900">To'yga taklif qilish</h3>
+                <p class="text-amber-600 font-extrabold mt-1 text-lg" id="selected-artist-placeholder">Artist: Yuklanmoqda...</p>
+            </div>
+            <form onsubmit="confirmBooking(event)">
+                <div class="mb-4">
+                    <label class="block text-slate-800 font-bold mb-2">To'y yoki Tadbir Sanasi</label>
+                    <input type="date" required class="w-full px-4 py-3 bg-slate-100 border border-slate-300 rounded-xl text-slate-950 font-bold focus:outline-none focus:ring-2 focus:ring-amber-500">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-slate-800 font-bold mb-2">Viloyat / Manzil</label>
+                    <select class="w-full px-4 py-3 bg-slate-100 border border-slate-300 rounded-xl text-slate-950 font-bold focus:outline-none focus:ring-2 focus:ring-amber-500">
+                        <option>Toshkent shahri & viloyati</option>
+                        <option>Samarqand viloyati</option>
+                        <option>Farg'ona vodiysi</option>
+                        <option>Buxoro & Navoiy</option>
+                        <option>Xorazm & Qoraqalpog'iston</option>
+                        <option>Qashqadaryo & Surxondaryo</option>
+                        <option>Jizzax & Sirdaryo</option>
+                    </select>
+                </div>
+                <div class="mb-6">
+                    <label class="block text-slate-800 font-bold mb-2">Tadbir turi</label>
+                    <select class="w-full px-4 py-3 bg-slate-100 border border-slate-300 rounded-xl text-slate-950 font-bold focus:outline-none focus:ring-2 focus:ring-amber-500">
+                        <option>Kechki Nikoh To'yi (Katta xizmat)</option>
+                        <option>Fotiha / Kelin navkar / Nahorgi osh</option>
+                        <option>Yubiley / Tug'ilgan kun</option>
+                        <option>Korporativ tadbirlar</option>
+                    </select>
+                </div>
+                <button type="submit" class="w-full py-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-lg transition shadow-lg">
+                    Ariza yuborish
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT JAMI 80 TA ARTIST MA'LUMOTLARI BAZASI -->
+    <script>
+        const artists = [
+            // Oldingi 30 ta asosiy artistlar
+            { id: 1, name: "Yulduz Usmonova", category: "pop", price: "$4,500", img: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=500&q=80", info: "O'zbekiston Primadonnasi. To'liq jonli ijro va raqs ansambli." },
+            { id: 2, name: "Ozodbek Nazarbekov", category: "mumtoz", price: "$4,000", img: "https://images.unsplash.com/photo-1501386761163-ec52b4ab510d?auto=format&fit=crop&w=500&q=80", info: "Klassik estrada ustasi. To'y tantanalari uchun mumtoz dasturlar." },
+            { id: 3, name: "Munisa Rizayeva", category: "pop", price: "$3,500", img: "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=500&q=80", info: "Eng talabgir pop xonanda. Sho'x va zamonaviy qo'shiqlar." },
+            { id: 4, name: "Ulug'bek Rahmatullayev", category: "estrada", price: "$2,800", img: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=500&q=80", info: "Lirik va romantik qo'shiqlar qiroli. Elegant to'y dasturi." },
+            { id: 5, name: "Rayhon G'aniyeva", category: "pop", price: "$3,000", img: "https://images.unsplash.com/photo-1525417071004-58401ee9979c?auto=format&fit=crop&w=500&q=80", info: "Zamonaviy shou-raqs, ajoyib vizual sahna chiqishlari." },
+            { id: 6, name: "Hamdam Sobirov", category: "pop", price: "$2,500", img: "https://images.unsplash.com/photo-1511192336575-5a79af67a629?auto=format&fit=crop&w=500&q=80", info: "Internetni portlatgan xit qo'shiqlar va to'yda drayv kayfiyat." },
+            { id: 7, name: "Jaloliddin Ahmadaliyev", category: "estrada", price: "$2,200", img: "https://images.unsplash.com/photo-1526218626217-dc65a29bb444?auto=format&fit=crop&w=500&q=80", info: "Xalqona va sokin qo'shiqlar egasi. To'ylardagi eksklyuziv ijro." },
+            { id: 8, name: "Tohir Sodiqov (Bolalar)", category: "pop", price: "$3,200", img: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=500&q=80", info: "Afsonaviy Bolalar guruhi qo'shiqlari va rok-pop retro kayfiyati." },
+            { id: 9, name: "Shahzoda", category: "pop", price: "$3,000", img: "https://images.unsplash.com/photo-1504609773096-104ff2c73ba4?auto=format&fit=crop&w=500&q=80", info: "O'zbek pop-musiqasining eng yorqin va betakror ovozi." },
+            { id: 10, name: "Shohruhxon", category: "estrada", price: "$2,600", img: "https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?auto=format&fit=crop&w=500&q=80", info: "Sho'x estrada qo'shiqlari, raqsbop kechalar va yuqori kayfiyat." },
+            { id: 11, name: "Lola Yo'ldosheva", category: "pop", price: "$2,400", img: "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?auto=format&fit=crop&w=500&q=80", info: "Fotiha va nikoh to'ylari uchun dildagi retro-pop va yangi taronalar." },
+            { id: 12, name: "Bunyodbek Saidov", category: "mumtoz", price: "$2,000", img: "https://images.unsplash.com/photo-1484712401471-05c7215a6957?auto=format&fit=crop&w=500&q=80", info: "Xorazm lazgisi va sho'x xalq qo'shiqlari. Jonli cholg'u ansambli." },
+            { id: 13, name: "Jahongir Otajonov", category: "mumtoz", price: "$3,800", img: "https://images.unsplash.com/photo-1518609878373-06d740f60d8b?auto=format&fit=crop&w=500&q=80", info: "Drayv va kutilmagan energiya. Jonli ijroda lazgi va mumtoz." },
+            { id: 14, name: "Botir Qodirov", category: "mumtoz", price: "$3,500", img: "https://images.unsplash.com/photo-1498038432885-c6f3f1b912ee?auto=format&fit=crop&w=500&q=80", info: "Mumtoz va zamonaviy krossover ashulalar. To'liq jonli guruh." },
+            { id: 15, name: "Benom Guruhi", category: "estrada", price: "$2,300", img: "https://images.unsplash.com/photo-1465847899084-d164df4dedc6?auto=format&fit=crop&w=500&q=80", info: "Sarvar va Komil ijrosidagi lirik dildagi qo'shiqlar to'plami." },
+            { id: 16, name: "Alisher Fayz", category: "estrada", price: "$2,000", img: "https://images.unsplash.com/photo-1506157786151-b8491531f063?auto=format&fit=crop&w=500&q=80", info: "Sokin va tarbiyaviy, quvnoq va fayzli to'ylar uchun munosib." },
+            { id: 17, name: "Nilufar Usmonova", category: "pop", price: "$2,500", img: "https://images.unsplash.com/photo-1508186227412-706d860d5b6e?auto=format&fit=crop&w=500&q=80", info: "O'zgacha energiya, zamonaviy to'ylar uchun dinamik repertuar." },
+            { id: 18, name: "Sardor Mamadaliyev", category: "mumtoz", price: "$1,800", img: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=500&q=80", info: "Lirik va mayus ohanglar bilan birga to'y oqshomi dasturlari." },
+            { id: 19, name: "VIA Marokand", category: "pop", price: "$2,200", img: "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?auto=format&fit=crop&w=500&q=80", info: "Raqsga chorlovchi retro va zamonaviy milliy remikslar." },
+            { id: 20, name: "Shoxrux", category: "pop", price: "$1,800", img: "https://images.unsplash.com/photo-1487180142328-0a4e37023ac5?auto=format&fit=crop&w=500&q=80", info: "Afsonaviy o'zbek rep yo'nalishi vakili. Yoshlar uchun kutilmagan sovg'a." },
+            { id: 21, name: "Ziyoda Qobilova", category: "pop", price: "$2,200", img: "https://images.unsplash.com/photo-1516280440614-37939bbacd6a?auto=format&fit=crop&w=500&q=80", info: "Turli millat va tillardagi shov-shuvli to'y xit qo'shiqlari." },
+            { id: 22, name: "Davron Kabulov", category: "boshlovchi", price: "$1,500", img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=500&q=80", info: "Eng sara tadbirlar boshlovchisi va so'z ustasi. Professional nazorat." },
+            { id: 23, name: "Halima Ibragimova", category: "boshlovchi", price: "$1,300", img: "https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?auto=format&fit=crop&w=500&q=80", info: "Kulguli va ajoyib shou dasturlari bilan to'y boshlovchiligi." },
+            { id: 24, name: "Zarina Nizomiddinova", category: "boshlovchi", price: "$1,200", img: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=500&q=80", info: "Kechki nikoh to'ylari va fotiha marosimlarining nafis boshlovchisi." },
+            { id: 25, name: "Konsta", category: "pop", price: "$2,000", img: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=500&q=80", info: "Ma'noli va chuqur lirik rep qo'shiqlar bilan zamonaviy yoshlar to'yi." },
+            { id: 26, name: "Gulsanam Mamazoitova", category: "mumtoz", price: "$2,700", img: "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=500&q=80", info: "Klassik o'zbek musiqasining yorqin ovozi. Haqiqiy san'at asari." },
+            { id: 27, name: "DJ Piligrim", category: "pop", price: "$1,500", img: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=500&q=80", info: "Tungi to'ylar, zamonaviy yoshlar disko blokini jonlantiruvchi yetakchi." },
+            { id: 28, name: "Ummon (Nostalgiya)", category: "pop", price: "$1,600", img: "https://images.unsplash.com/photo-1511367461989-f85a21fda167?auto=format&fit=crop&w=500&q=80", info: "Keksa va yosh yodida qolgan hit lirik va raqs taronalari retrospektivasi." },
+            { id: 29, name: "Sherzod Ergashev", category: "estrada", price: "$1,200", img: "https://images.unsplash.com/photo-1501386761163-ec52b4ab510d?auto=format&fit=crop&w=500&q=80", info: "Sifatli va qiziqarli to'ybop estrada qo'shiqlari talabgiri." },
+            { id: 30, name: "Jasur Guruhi", category: "estrada", price: "$1,300", img: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=500&q=80", info: "Barcha to'yda o'yin-kulgu va doimiy yuqori jozibadorlik drayvi." },
+
+            // YANGA QO'SHILGAN 50 TA PROFESSIONAL ARTIST (31-80)
+            { id: 31, name: "G'iyos Boytoyev", category: "mumtoz", price: "$2,300", img: "https://images.unsplash.com/photo-1465847899084-d164df4dedc6?auto=format&fit=crop&w=500&q=80", info: "Jonli ijro, an'anaviy to'y qo'shiqlari ustasi." },
+            { id: 32, name: "Sardor Rahimxon", category: "estrada", price: "$2,500", img: "https://images.unsplash.com/photo-1506157786151-b8491531f063?auto=format&fit=crop&w=500&q=80", info: "Yurakdan chiquvchi dildagi taronalar dasturi." },
+            { id: 33, name: "Kaniza", category: "pop", price: "$1,800", img: "https://images.unsplash.com/photo-1508186227412-706d860d5b6e?auto=format&fit=crop&w=500&q=80", info: "Sho'x pop dasturlari va jozibali raqslar to'plami." },
+            { id: 34, name: "Zafar Noyibov", category: "estrada", price: "$1,400", img: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=500&q=80", info: "Klassik va quvnoq to'y navbatlari uchun estrada ijrochisi." },
+            { id: 35, name: "Sitora Guruhi", category: "pop", price: "$2,200", img: "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?auto=format&fit=crop&w=500&q=80", info: "90-yillar nostalgiya pop xitlari va ajoyib retro shou." },
+            { id: 36, name: "Otabek Mutalxo'jayev", category: "estrada", price: "$1,700", img: "https://images.unsplash.com/photo-1487180142328-0a4e37023ac5?auto=format&fit=crop&w=500&q=80", info: "Lirik va zamonaviy ritmlarga boy to'y xizmatlari." },
+            { id: 37, name: "Dildora Niyozova", category: "mumtoz", price: "$1,900", img: "https://images.unsplash.com/photo-1516280440614-37939bbacd6a?auto=format&fit=crop&w=500&q=80", info: "Dildagi va oilaviy qadriyatlarga bag'ishlangan chiroyli qo'shiqlar." },
+            { id: 38, name: "Anvar Sanayev", category: "estrada", price: "$1,600", img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=500&q=80", info: "Retro estrada taronalari bilan to'ylarda ajoyib fayz." },
+            { id: 39, name: "Dilso'z", category: "pop", price: "$1,500", img: "https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?auto=format&fit=crop&w=500&q=80", info: "Yoqimli ovoz va nikoh kechalari uchun nafis lirik pop." },
+            { id: 40, name: "Ruhshona", category: "pop", price: "$1,400", img: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=500&q=80", info: "Sho'x va dinamik ritmdagi yoshbop dasturlar egasi." },
+            { id: 41, name: "Anvar G'aniyev", category: "mumtoz", price: "$2,100", img: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=500&q=80", info: "Yillar sinovidan o'tgan mumtoz ohanglar va samimiy ijro." },
+            { id: 42, name: "Ahad Qayum", category: "boshlovchi", price: "$1,000", img: "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=500&q=80", info: "Sahnada o'zgacha chiqishlar va faol she'riy boshlovchilik." },
+            { id: 43, name: "Nilufar Jumaniyozova", category: "mumtoz", price: "$1,800", img: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=500&q=80", info: "Xorazmcha lazgi ritmlari va drayv jonli ijro ansambli." },
+            { id: 44, name: "Bahriddin Zuhriddinov", category: "estrada", price: "$1,500", img: "https://images.unsplash.com/photo-1511367461989-f85a21fda167?auto=format&fit=crop&w=500&q=80", info: "Lirik va quvnoq estrada yo'nalishidagi to'y xizmatlari." },
+            { id: 45, name: "Shahlo Ahmedova", category: "pop", price: "$2,200", img: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=500&q=80", info: "Evropa standartlaridagi zamonaviy va nafis pop musiqasi." },
+            { id: 46, name: "Sanjar Nazarov", category: "boshlovchi", price: "$1,200", img: "https://images.unsplash.com/photo-1501386761163-ec52b4ab510d?auto=format&fit=crop&w=500&q=80", info: "Madaniyatli, professional va yuqori darajadagi boshlovchilik." },
+            { id: 47, name: "Jahongir Poziljonov", category: "pop", price: "$2,400", img: "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=500&q=80", info: "Xonjon guruhi xitlari, komik va quvnoq to'y shoulari." },
+            { id: 48, name: "Manzura", category: "pop", price: "$2,000", img: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=500&q=80", info: "Klassik o'zbek pop yo'nalishi xitlari va raqsbop kecha." },
+            { id: 49, name: "Malika Ravshanova", category: "mumtoz", price: "$1,700", img: "https://images.unsplash.com/photo-1525417071004-58401ee9979c?auto=format&fit=crop&w=500&q=80", info: "Dildagi ayollarga xos nafis mumtoz taronalar ijrochisi." },
+            { id: 50, name: "Farruh Komilov", category: "pop", price: "$1,600", img: "https://images.unsplash.com/photo-1511192336575-5a79af67a629?auto=format&fit=crop&w=500&q=80", info: "Yoshlar uchun zamonaviy va sho'x raqsbop treklar ketma-ketligi." },
+            { id: 51, name: "Abduvali Rajabov", category: "estrada", price: "$1,500", img: "https://images.unsplash.com/photo-1526218626217-dc65a29bb444?auto=format&fit=crop&w=500&q=80", info: "Dildagi romantik ohanglar va madaniyatli to'y xizmati." },
+            { id: 52, name: "Masrur Usmonov", category: "mumtoz", price: "$1,800", img: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=500&q=80", info: "Farg'onacha mumtoz maktabi an'analari asosidagi jonli ijro." },
+            { id: 53, name: "Yodgor Mirzajonov", category: "estrada", price: "$1,400", img: "https://images.unsplash.com/photo-1504609773096-104ff2c73ba4?auto=format&fit=crop&w=500&q=80", info: "Kuchli vokal va jonli ijrodagi mashhur estrada bloklari." },
+            { id: 54, name: "Munojot Yo'lchiyeva", category: "mumtoz", price: "$3,000", img: "https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?auto=format&fit=crop&w=500&q=80", info: "Akademik darajadagi maqom va mumtoz kechalar uchun." },
+            { id: 55, name: "Sardor Toirov", category: "pop", price: "$1,300", img: "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?auto=format&fit=crop&w=500&q=80", info: "So'nggi yillarda yoshlar orasida juda ommalashgan pop treklar." },
+            { id: 56, name: "Asilbek Negmatov", category: "estrada", price: "$1,200", img: "https://images.unsplash.com/photo-1484712401471-05c7215a6957?auto=format&fit=crop&w=500&q=80", info: "Samimiy ohanglar, to'y oqshomining chiroyli boshlanishi." },
+            { id: 57, name: "Otabek Muhammadzohid", category: "mumtoz", price: "$2,500", img: "https://images.unsplash.com/photo-1518609878373-06d740f60d8b?auto=format&fit=crop&w=500&q=80", info: "Vodiycha maqom va jonli ijroning eng yuqori cho'qqisi." },
+            { id: 58, name: "Doston Ergashev", category: "pop", price: "$2,000", img: "https://images.unsplash.com/photo-1498038432885-c6f3f1b912ee?auto=format&fit=crop&w=500&q=80", info: "Xalq sevgan hit lirik va sho'x qo'shiqlar ketma-ketligi." },
+            { id: 59, name: "Sherzod Bin", category: "boshlovchi", price: "$1,400", img: "https://images.unsplash.com/photo-1465847899084-d164df4dedc6?auto=format&fit=crop&w=500&q=80", info: "Zamonaviy, quvnoq va yuqori tempdagi to'y boshlovchisi." },
+            { id: 60, name: "Relyaks Guruhi", category: "pop", price: "$1,500", img: "https://images.unsplash.com/photo-1506157786151-b8491531f063?auto=format&fit=crop&w=500&q=80", info: "Diskoteka va instrumental sho'x bloklar ustasi." },
+            { id: 61, name: "Jasur Umirov", category: "pop", price: "$1,800", img: "https://images.unsplash.com/photo-1508186227412-706d860d5b6e?auto=format&fit=crop&w=500&q=80", info: "Energetik va o'ta quvnoq xit taronalar jamlanmasi." },
+            { id: 62, name: "A'lo Guruhi", category: "pop", price: "$1,400", img: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=500&q=80", info: "To'ylarbop eng sara sho'x va zamonaviy qo'shiqlar dasturi." },
+            { id: 63, name: "G'ulomjon Yoqubov", category: "mumtoz", price: "$2,600", img: "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?auto=format&fit=crop&w=500&q=80", info: "O'zbekiston xalq artisti. To'ylar uchun afsonaviy dastur." },
+            { id: 64, name: "Zuhra Aliyeva", category: "pop", price: "$1,300", img: "https://images.unsplash.com/photo-1487180142328-0a4e37023ac5?auto=format&fit=crop&w=500&q=80", info: "Kelin salom va nikoh to'ylari uchun ajoyib lirik repertuar." },
+            { id: 65, name: "Elyor Meliboyev", category: "estrada", price: "$1,500", img: "https://images.unsplash.com/photo-1516280440614-37939bbacd6a?auto=format&fit=crop&w=500&q=80", info: "Kuchli ovoz va barcha viloyatlar uchun universal repertuar." },
+            { id: 66, name: "Jur'at Guruhi", category: "mumtoz", price: "$1,600", img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=500&q=80", info: "Jonli cholg'u ansambli hamda milliy va klassik kuy-qo'shiqlar." },
+            { id: 67, name: "Milena Madmusayeva", category: "estrada", price: "$2,000", img: "https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?auto=format&fit=crop&w=500&q=80", info: "Opera va klassik estrada uyg'unligidagi ajoyib vokal." },
+            { id: 68, name: "Sirojiddin Hojiyev", category: "mumtoz", price: "$1,400", img: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=500&q=80", info: "Sokin va chuqur ma'noli xalqona qo'shiqlar ustasi." },
+            { id: 69, name: "Shaxriyor", category: "pop", price: "$1,600", img: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=500&q=80", info: "Retro rep xitlari va yoshlar to'yi uchun o'zgacha drayv." },
+            { id: 70, name: "Nilufar Saidova", category: "boshlovchi", price: "$1,100", img: "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=500&q=80", info: "Ayollar marosimlari va fotiha to'ylarining yetakchi boshlovchisi." },
+            { id: 71, name: "Bobur Bobomurod", category: "boshlovchi", price: "$1,300", img: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=500&q=80", info: "She'riyatga boy, samimiy va milliy ruhdagi so'z ustasi." },
+            { id: 72, name: "Rahmatjon Qurbonov", category: "mumtoz", price: "$2,200", img: "https://images.unsplash.com/photo-1511367461989-f85a21fda167?auto=format&fit=crop&w=500&q=80", info: "Xorazm doston va lazgi maktabining yirik vakili." },
+            { id: 73, name: "Shahrizoda Guruhi", category: "pop", price: "$1,700", img: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=500&q=80", info: "Sharqona uslubdagi sho'x pop va go'zal raqs shousi." },
+            { id: 74, name: "Zokir Ojiz", category: "mumtoz", price: "$1,500", img: "https://images.unsplash.com/photo-1501386761163-ec52b4ab510d?auto=format&fit=crop&w=500&q=80", info: "Qalbga yaqin lirik janrdagi mumtoz qo'shiqlar." },
+            { id: 75, name: "Umida Mirhamidova", category: "estrada", price: "$1,600", img: "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=500&q=80", info: "Kuchli vokal va jozibali estrada qo'shiqlari to'plami." },
+            { id: 76, name: "Rustam G'oipov", category: "mumtoz", price: "$2,000", img: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=500&q=80", info: "Jonli ijroda xalq sevgan ashulalar ustasi." },
+            { id: 77, name: "Shahnoza Otaboyeva", category: "estrada", price: "$1,500", img: "https://images.unsplash.com/photo-1525417071004-58401ee9979c?auto=format&fit=crop&w=500&q=80", info: "Nafis va yoqimli ovoz sohibasi, to'ybop sho'x taronalar." },
+            { id: 78, name: "Diyor Guruhi", category: "pop", price: "$1,200", img: "https://images.unsplash.com/photo-1511192336575-5a79af67a629?auto=format&fit=crop&w=500&q=80", info: "Hamyonbop va juda sho'x to'y diskoteka xizmatlari." },
+            { id: 79, name: "Abdujalil Qo'qonov", category: "estrada", price: "$1,600", img: "https://images.unsplash.com/photo-1526218626217-dc65a29bb444?auto=format&fit=crop&w=500&q=80", info: "Vodiy va Toshkent to'ylarida juda ommabop xonanda." },
+            { id: 80, name: "Yulduz Nizomova", category: "pop", price: "$1,400", img: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=500&q=80", info: "Zamonaviy pop-shou hamda quvnoq to'y dasturlari." }
+        ];
+
+        let state = {
+            isLoggedIn: false,
+            currentUser: "",
+            activeFilter: "barchasi"
+        };
+
+        window.onload = function() {
+            const savedUser = localStorage.getItem("yulduzlar_user");
+            if(savedUser) {
+                state.isLoggedIn = true;
+                state.currentUser = savedUser;
+            }
+            updateUI();
+        };
+
+        function openModal(id) {
+            document.getElementById(id).classList.remove('hidden');
+            document.getElementById(id).classList.add('flex');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('flex');
+            document.getElementById(id).classList.add('hidden');
+        }
+
+        function handleAuth(event, type) {
+            event.preventDefault();
+            let userName = "";
+
+            if(type === 'register') {
+                userName = document.getElementById('reg-name').value;
+                closeModal('registerModal');
+            } else {
+                const phone = document.getElementById('login-phone').value;
+                userName = phone.split(' ')[0] || "A'zo";
+                closeModal('loginModal');
+            }
+
+            state.isLoggedIn = true;
+            state.currentUser = userName;
+            localStorage.setItem("yulduzlar_user", userName);
+
+            updateUI();
+            alert(`Xush kelibsiz, ${userName}! 80 ta eng sara artistlar ro'yxati siz uchun ochildi!`);
+        }
+
+        function logout() {
+            state.isLoggedIn = false;
+            state.currentUser = "";
+            localStorage.removeItem("yulduzlar_user");
+            updateUI();
+            alert("Siz tizimdan chiqdingiz!");
+        }
+
+        function updateUI() {
+            const lockedState = document.getElementById('locked-state');
+            const unlockedState = document.getElementById('unlocked-state');
+            const navAuth = document.getElementById('nav-auth-buttons');
+            const navUser = document.getElementById('nav-user-profile');
+            const userDispName = document.getElementById('user-display-name');
+
+            if (state.isLoggedIn) {
+                lockedState.classList.add('hidden');
+                unlockedState.classList.remove('hidden');
+                navAuth.classList.add('hidden');
+                navUser.classList.remove('hidden');
+                userDispName.innerText = state.currentUser;
+                renderArtists();
+            } else {
+                lockedState.classList.remove('hidden');
+                unlockedState.classList.add('hidden');
+                navAuth.classList.remove('hidden');
+                navUser.classList.add('hidden');
+            }
+        }
+
+        function setFilter(category) {
+            state.activeFilter = category;
+            
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('active', 'bg-amber-500', 'text-slate-950');
+                btn.classList.add('bg-slate-850', 'text-slate-300');
+            });
+
+            event.target.classList.add('active', 'bg-amber-500', 'text-slate-950');
+            event.target.classList.remove('bg-slate-850', 'text-slate-300');
+
+            filterAndSearchArtists();
+        }
+
+        function filterAndSearchArtists() {
+            const query = document.getElementById('search-input').value.toLowerCase();
+            const filtered = artists.filter(artist => {
+                const matchesCategory = (state.activeFilter === "barchasi") || (artist.category === state.activeFilter);
+                const matchesSearch = artist.name.toLowerCase().includes(query);
+                return matchesCategory && matchesSearch;
+            });
+
+            renderArtists(filtered);
+        }
+
+        function renderArtists(artistsList = artists) {
+            const grid = document.getElementById('artists-grid');
+            grid.innerHTML = "";
+
+            if (artistsList.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full text-center py-12">
+                        <p class="text-slate-500 text-xl font-bold">Kechirasiz, qidiruv bo'yicha artist topilmadi.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            artistsList.forEach(artist => {
+                const card = document.createElement('div');
+                card.className = "bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl hover:border-amber-500/50 transition-all duration-300 flex flex-col justify-between";
+                
+                card.innerHTML = `
+                    <div>
+                        <div class="h-60 overflow-hidden relative group">
+                            <img src="${artist.img}" alt="${artist.name}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                            <span class="absolute top-4 right-4 bg-slate-950/80 backdrop-blur-md px-3 py-1 rounded-xl text-xs font-extrabold uppercase text-amber-500 border border-amber-500/20">
+                                ${artist.category}
+                            </span>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-2xl font-black text-white mb-2">${artist.name}</h3>
+                            <p class="text-slate-400 font-bold text-sm mb-4 leading-relaxed">${artist.info}</p>
+                        </div>
+                    </div>
+                    <div class="px-6 pb-6 pt-2 border-t border-slate-850">
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-slate-500 font-bold text-sm">Xizmat haqi</span>
+                            <span class="text-amber-500 text-xl font-black">${artist.price}</span>
+                        </div>
+                        <button onclick="bookArtist('${artist.name}')" class="w-full py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold rounded-xl transition shadow-lg shadow-amber-500/10">
+                            <i class="fa-solid fa-calendar-check mr-2"></i> To'yga Band Qilish
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        let selectedArtist = "";
+        function bookArtist(name) {
+            selectedArtist = name;
+            document.getElementById('selected-artist-placeholder').innerText = `Tanlangan Artist: ${name}`;
+            openModal('bookingModal');
+        }
+
+        function confirmBooking(event) {
+            event.preventDefault();
+            closeModal('bookingModal');
+            alert(`Tabriklaymiz! Sizning ${selectedArtist} uchun band qilish arizangiz muvaffaqiyatli qabul qilindi!`);
+        }
+    </script>
+</body>
+</html>

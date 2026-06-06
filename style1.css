@@ -1,0 +1,297 @@
+/* Umumiy sozlamalar */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    background-color: #f0f2f5;
+    display: flex;
+    justify-content: center;
+    padding: 40px 0;
+}
+
+/* Rezyume konteyneri (A4 formatiga yaqin proportsiya) */
+.resume-container {
+    width: 800px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+}
+
+/* Tepadagi to'q rangli qism */
+.resume-header {
+    background-color: #2e3846; /* To'q ko'k-kulrang */
+    color: #ffffff;
+    padding: 40px 50px 40px 300px; /* Chapdan rasm uchun joy tashlangan */
+    min-height: 140px;
+    display: flex;
+    align-items: center;
+}
+
+.header-text h1 {
+    font-size: 32px;
+    letter-spacing: 2px;
+    font-weight: 700;
+}
+
+.header-text h2 {
+    font-size: 16px;
+    color: #b0b8c4;
+    letter-spacing: 3px;
+    margin-top: 5px;
+    font-weight: 400;
+}
+
+/* Rezyume asosiy qismi */
+.resume-body {
+    display: flex;
+    flex-grow: 1;
+    position: relative;
+}
+
+/* CHAP USTUN (SIDEBAR) */
+.sidebar {
+    width: 270px;
+    background-color: #e3e6eb; /* Och kulrang */
+    padding: 30px 25px;
+    position: relative;
+}
+
+/* Profil rasmi joylashuvi */
+.profile-img-container {
+    position: absolute;
+    top: -110px;
+    left: 25px;
+    z-index: 10;
+}
+
+.profile-img {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    border: 5px solid #ffffff;
+    object-fit: cover;
+    background-color: #ccc;
+}
+
+.sidebar-section {
+    margin-top: 35px;
+}
+
+/* Profil ostidagi birinchi bo'lim uchun maxsus joy */
+.sidebar .sidebar-section:first-of-type {
+    margin-top: 70px; 
+}
+
+.sidebar h3 {
+    font-size: 16px;
+    color: #2e3846;
+    letter-spacing: 2px;
+    border-bottom: 2px solid #2e3846;
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+}
+
+.contact-list {
+    list-style: none;
+}
+
+.contact-list li {
+    font-size: 12px;
+    color: #4a5464;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+}
+
+.contact-list li i {
+    width: 20px;
+    color: #2e3846;
+    font-size: 14px;
+}
+
+.bullet-list {
+    list-style-type: none;
+    padding-left: 5px;
+}
+
+.bullet-list li {
+    font-size: 13px;
+    color: #4a5464;
+    margin-bottom: 8px;
+    position: relative;
+    padding-left: 15px;
+}
+
+/* Nuqtachalar (Bullet) o'rniga maxsus uslub */
+.bullet-list li::before {
+    content: "•";
+    color: #2e3846;
+    font-weight: bold;
+    position: absolute;
+    left: 0;
+    top: -1px;
+}
+
+.reference-item p {
+    font-size: 12px;
+    color: #4a5464;
+    line-height: 1.6;
+}
+
+.reference-item .ref-name {
+    font-weight: bold;
+    font-size: 14px;
+    color: #2e3846;
+}
+
+.reference-item .ref-title {
+    margin-bottom: 5px;
+}
+
+/* O'NG USTUN (MAIN CONTENT) */
+.main-content {
+    flex: 1;
+    padding: 40px 40px 40px 30px;
+    background-color: #ffffff;
+}
+
+.main-section {
+    margin-bottom: 30px;
+    position: relative;
+}
+
+/* Chap tomondagi vaqt chizig'i (Timeline) effekti */
+.main-content::before {
+    content: '';
+    position: absolute;
+    top: 40px;
+    bottom: 40px;
+    left: 45px;
+    width: 1px;
+    background-color: #ccd1d9;
+    z-index: 1;
+}
+
+.timeline-item {
+    position: relative;
+    padding-left: 45px;
+    margin-bottom: 15px;
+    z-index: 2;
+}
+
+/* Doiraviy ikonka dizayni */
+.section-icon {
+    position: absolute;
+    left: -15px;
+    top: -2px;
+    width: 30px;
+    height: 30px;
+    background-color: #2e3846;
+    color: #ffffff;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    border: 3px solid #ffffff;
+}
+
+.main-section h3 {
+    font-size: 16px;
+    color: #2e3846;
+    letter-spacing: 2px;
+    border-bottom: 2px solid #ccd1d9;
+    padding-bottom: 5px;
+}
+
+.profile-text {
+    font-size: 12px;
+    color: #555;
+    line-height: 1.6;
+    text-align: justify;
+    margin-top: 10px;
+}
+
+/* Ish joylari va ta'lim qismi */
+.sub-timeline {
+    padding-left: 45px;
+}
+
+.timeline-sub-item {
+    position: relative;
+    margin-bottom: 25px;
+}
+
+/* Vaqt chizig'idagi kichik nuqtachalar */
+.timeline-sub-item::before {
+    content: '';
+    position: absolute;
+    left: -48px;
+    top: 5px;
+    width: 7px;
+    height: 7px;
+    background-color: #ccd1d9;
+    border-radius: 50%;
+    border: 1px solid #ffffff;
+    z-index: 2;
+}
+
+.job-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 8px;
+}
+
+.job-header h4 {
+    font-size: 14px;
+    color: #2e3846;
+    font-weight: bold;
+}
+
+.job-title, .school-name {
+    font-size: 13px;
+    color: #555;
+    font-style: italic;
+    margin-top: 2px;
+}
+
+.date {
+    font-size: 12px;
+    color: #777;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.work-desc {
+    list-style-type: none;
+    padding-left: 5px;
+}
+
+.work-desc li {
+    font-size: 12px;
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 5px;
+    position: relative;
+    padding-left: 15px;
+}
+
+.work-desc li::before {
+    content: "•";
+    color: #4a5464;
+    position: absolute;
+    left: 0;
+}
+
+.gpa {
+    font-size: 12px;
+    color: #4a5464;
+    font-weight: bold;
+    margin-top: 3px;
+}

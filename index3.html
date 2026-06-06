@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Klassik 2D Poyga O'yini</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 h-screen flex flex-col items-center justify-center font-sans overflow-hidden select-none">
+
+    <div class="w-full max-w-lg flex justify-between items-center px-4 mb-2 text-white">
+        <div>
+            <h1 class="text-2xl font-black tracking-wider text-yellow-400">2D RACER</h1>
+            <p class="text-[10px] text-slate-400 font-bold">BOSHQRUV: Chap / O'ng strelkalar</p>
+        </div>
+        <div class="flex gap-4 text-base font-black bg-slate-800 px-4 py-1.5 rounded-lg border border-slate-700 shadow-lg">
+            <div>BALL: <span id="scoreDisplay" class="text-emerald-400">0</span></div>
+            <div class="text-slate-500">|</div>
+            <div>MASOFA: <span id="distanceDisplay" class="text-cyan-400">0</span> <span class="text-xs text-slate-400">m</span></div>
+        </div>
+    </div>
+
+    <div class="relative w-full max-w-lg aspect-[3/4] bg-slate-800 rounded-2xl overflow-hidden border-4 border-slate-700 shadow-2xl">
+        <canvas id="gameCanvas" width="450" height="600" class="w-full h-full block bg-emerald-800"></canvas>
+
+        <div class="absolute bottom-4 left-4 right-4 flex justify-between pointer-events-none z-20">
+            <button id="btnLeft" class="pointer-events-auto bg-slate-900/70 active:bg-yellow-400 text-white active:text-slate-950 w-16 h-16 rounded-full font-black text-2xl flex items-center justify-center backdrop-blur-sm shadow-lg">◀</button>
+            <button id="btnRight" class="pointer-events-auto bg-slate-900/70 active:bg-yellow-400 text-white active:text-slate-950 w-16 h-16 rounded-full font-black text-2xl flex items-center justify-center backdrop-blur-sm shadow-lg">▶</button>
+        </div>
+
+        <div id="gameOverScreen" class="absolute inset-0 bg-black/80 flex flex-col items-center justify-center hidden z-30">
+            <h2 class="text-4xl font-black text-red-500 mb-2 tracking-wide">AVARIYA!</h2>
+            <div class="text-center text-white text-lg font-bold mb-6 space-y-1">
+                <p>To'plangan ball: <span id="finalScore" class="text-emerald-400">0</span></p>
+                <p>Bosib o'tilgan masofa: <span id="finalDistance" class="text-cyan-400">0</span> metr</p>
+            </div>
+            <button id="restartBtn" class="bg-yellow-400 text-slate-900 font-black text-lg px-6 py-3 rounded-xl uppercase tracking-wider active:scale-95 transition-all">
+                Yana boshlash
+            </button>
+        </div>
+
+        <div id="startScreen" class="absolute inset-0 bg-slate-950/95 flex flex-col items-center justify-center z-30">
+            <h2 class="text-4xl font-black text-yellow-400 mb-2 tracking-wide">2D POYGA</h2>
+            <p class="text-slate-400 text-sm font-bold mb-6 text-center px-6">Mashinalardan qoching, ball yig'ing va masofa rekordini yangilang!</p>
+            <button id="startBtn" class="bg-cyan-500 text-white font-black text-xl px-10 py-4 rounded-xl uppercase tracking-widest active:scale-95 transition-all shadow-lg">
+                START
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Yo'l o'lchamlari
+        const roadX = 50;
+        const roadWidth = canvas.width - 100;
+        const laneWidth = roadWidth / 3;
+
+        // O'yinchi mashinasi
+        const player = {
+            x: canvas.width / 2 - 20,
+            y: canvas.height - 100,
+            w: 40,
+            h: 70,
+            speed: 5
+        };
+
+        let keys = { Left: false, Right: false };
+        let enemies = [];
+        let score = 0;
+        let distance = 0; // Masofa o'zgaruvchisi
+        let inGame = false;
+        let lineOffset = 0;
+        let gameSpeed = 6;
+        let spawnTimeout;
+
+        // Boshqaruv (Klaviatura)
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') keys.Left = true;
+            if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') keys.Right = true;
+        });
+        window.addEventListener('keyup', (e) => {
+            if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') keys.Left = false;
+            if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') keys.Right = false;
+        });
+
+        // Sensor tugmalar
+        const btnLeft = document.getElementById('btnLeft');
+        const btnRight = document.getElementById('btnRight');
+        btnLeft.addEventListener('mousedown', () => keys.Left = true);
+        btnLeft.addEventListener('mouseup', () => keys.Left = false);
+        btnLeft.addEventListener('touchstart', (e) => { e.preventDefault(); keys.Left = true; });
+        btnLeft.addEventListener('touchend', () => keys.Left = false);
+        btnRight.addEventListener('mousedown', () => keys.Right = true);
+        btnRight.addEventListener('mouseup', () => keys.Right = false);
+        btnRight.addEventListener('touchstart', (e) => { e.preventDefault(); keys.Right = true; });
+        btnRight.addEventListener('touchend', () => keys.Right = false);
+
+        // Raqib yaratish
+        function spawnEnemy() {
+            if (!inGame) return;
+            const lanes = [0, 1, 2];
+            const randomLane = lanes[Math.floor(Math.random() * lanes.length)];
+            
+            enemies.push({
+                x: roadX + randomLane * laneWidth + (laneWidth - 35) / 2,
+                y: -100,
+                w: 35,
+                h: 65,
+                color: ['#3b82f6', '#eab308', '#a855f7', '#ec4899'][Math.floor(Math.random() * 4)]
+            });
+
+            // Vaqtni hisoblab qayta chaqirish
+            let nextSpawn = 1200 - Math.min(gameSpeed * 50, 600);
+            spawnTimeout = setTimeout(spawnEnemy, nextSpawn);
+        }
+
+        function update() {
+            if (!inGame) return;
+
+            // O'yinchi harakati
+            if (keys.Left && player.x > roadX + 5) player.x -= player.speed;
+            if (keys.Right && player.x < roadX + roadWidth - player.w - 5) player.x += player.speed;
+
+            // Yo'l chiziqlari harakati
+            lineOffset += gameSpeed;
+            if (lineOffset >= 40) lineOffset = 0;
+
+            // MASOFA HISOB-KITOBI (Tezlikka qarab metr ko'payadi)
+            distance += (gameSpeed * 0.05);
+            document.getElementById('distanceDisplay').innerText = Math.floor(distance);
+
+            // Raqiblar harakati
+            for (let i = enemies.length - 1; i >= 0; i--) {
+                enemies[i].y += gameSpeed;
+
+                // To'qnashuv (Avariya)
+                if (
+                    player.x < enemies[i].x + enemies[i].w &&
+                    player.x + player.w > enemies[i].x &&
+                    player.y < enemies[i].y + enemies[i].h &&
+                    player.y + player.h > enemies[i].y
+                ) {
+                    endGame();
+                }
+
+                // O'tib ketgan raqiblar uchun BALL
+                if (enemies[i].y > canvas.height) {
+                    enemies.splice(i, 1);
+                    score++;
+                    document.getElementById('scoreDisplay').innerText = score;
+                    
+                    // Tezlikni oshirish
+                    if (score % 5 === 0) gameSpeed += 0.5;
+                }
+            }
+        }
+
+        function render() {
+            // Maysa
+            ctx.fillStyle = '#047857';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Asfalt
+            ctx.fillStyle = '#1e293b';
+            ctx.fillRect(roadX, 0, roadWidth, canvas.height);
+
+            // Yon to'siqlar
+            ctx.fillStyle = '#ef4444';
+            ctx.fillRect(roadX - 10, 0, 10, canvas.height);
+            ctx.fillRect(roadX + roadWidth, 0, 10, canvas.height);
+            
+            ctx.fillStyle = '#ffffff';
+            for (let y = lineOffset % 20; y < canvas.height; y += 40) {
+                ctx.fillRect(roadX - 10, y, 10, 20);
+                ctx.fillRect(roadX + roadWidth, y, 10, 20);
+            }
+
+            // Oq chiziqlar
+            ctx.fillStyle = '#ffffff';
+            for (let l = 1; l < 3; l++) {
+                let lx = roadX + l * laneWidth;
+                for (let y = -40 + lineOffset; y < canvas.height; y += 50) {
+                    ctx.fillRect(lx - 2, y, 4, 25);
+                }
+            }
+
+            // Raqiblarni chizish
+            enemies.forEach(enemy => {
+                ctx.fillStyle = enemy.color;
+                ctx.fillRect(enemy.x, enemy.y, enemy.w, enemy.h);
+                ctx.fillStyle = '#0f172a';
+                ctx.fillRect(enemy.x + 5, enemy.y + 12, enemy.w - 10, 15);
+                ctx.fillRect(enemy.x - 3, enemy.y + 10, 3, 12);
+                ctx.fillRect(enemy.x + enemy.w, enemy.y + 10, 3, 12);
+                ctx.fillRect(enemy.x - 3, enemy.y + 45, 3, 12);
+                ctx.fillRect(enemy.x + enemy.w, enemy.y + 45, 3, 12);
+            });
+
+            // Asosiy qizil mashina
+            ctx.fillStyle = '#dc2626';
+            ctx.fillRect(player.x, player.y, player.w, player.h);
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(player.x + 8, player.y, 4, player.h);
+            ctx.fillRect(player.x + player.w - 12, player.y, 4, player.h);
+            ctx.fillStyle = '#0f172a';
+            ctx.fillRect(player.x + 6, player.y + 35, player.w - 12, 18);
+            ctx.fillStyle = '#000000';
+            ctx.fillRect(player.x - 4, player.y + 12, 4, 15);
+            ctx.fillRect(player.x + player.w, player.y + 12, 4, 15);
+            ctx.fillRect(player.x - 4, player.y + 48, 4, 15);
+            ctx.fillRect(player.x + player.w, player.y + 48, 4, 15);
+        }
+
+        function gameLoop() {
+            update();
+            render();
+            requestAnimationFrame(gameLoop);
+        }
+
+        function startGame() {
+            clearTimeout(spawnTimeout);
+            document.getElementById('startScreen').classList.add('hidden');
+            document.getElementById('gameOverScreen').classList.add('hidden');
+            enemies = [];
+            score = 0;
+            distance = 0;
+            gameSpeed = 6;
+            player.x = canvas.width / 2 - 20;
+            document.getElementById('scoreDisplay').innerText = score;
+            document.getElementById('distanceDisplay').innerText = 0;
+            inGame = true;
+            spawnEnemy();
+        }
+
+        function endGame() {
+            inGame = false;
+            clearTimeout(spawnTimeout);
+            document.getElementById('finalScore').innerText = score;
+            document.getElementById('finalDistance').innerText = Math.floor(distance);
+            document.getElementById('gameOverScreen').classList.remove('hidden');
+        }
+
+        document.getElementById('startBtn').addEventListener('click', startGame);
+        document.getElementById('restartBtn').addEventListener('click', startGame);
+
+        render();
+        gameLoop();
+    </script>
+</body>
+</html>

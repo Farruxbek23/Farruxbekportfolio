@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CV - Odilbekov Farruxbek</title>
+
+<!-- Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<!-- html2pdf.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #eef2f3;
+    color: #333;
+}
+/* A4 Sahifa boshqaruvi */
+.wrapper {
+    display: flex;
+    width: 210mm; 
+    height: 297mm; 
+    margin: 30px auto;
+    background: #fff;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+/* CHAP PANEL */
+.left {
+    width: 35%;
+    background: #1e293b; 
+    color: #f8fafc;
+    padding: 25px 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.profile {
+    text-align: center;
+}
+.profile img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #38bdf8; 
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    margin-bottom: 10px;
+}
+.profile h2 {
+    font-size: 19px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: #fff;
+}
+.profile p {
+    font-size: 12px;
+    color: #38bdf8;
+    font-weight: 500;
+    margin-top: 2px;
+}
+
+/* O'NG PANEL */
+.right {
+    width: 65%;
+    padding: 30px 30px;
+    display: flex;
+    flex-direction: column;
+}
+.right h1 {
+    font-size: 26px;
+    color: #0f172a;
+    font-weight: 700;
+    border-bottom: 3px solid #38bdf8;
+    padding-bottom: 6px;
+    margin-bottom: 15px;
+}
+
+/* Bo'limlar uslubi */
+.section {
+    margin-top: 12px;
+}
+.section h3 {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.left .section h3 {
+    color: #38bdf8;
+    border-bottom: 1px solid #334155;
+    padding-bottom: 4px;
+}
+.right .section h3 {
+    color: #0f172a;
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 3px;
+}
+
+/* Matnlar */
+.left .section p {
+    font-size: 12px;
+    color: #cbd5e1;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.left .section p i {
+    color: #38bdf8;
+    font-size: 13px;
+}
+.right .section p {
+    font-size: 13px;
+    color: #475569;
+    line-height: 1.4;
+    margin-top: 4px;
+}
+
+/* Loyihalar ro'yxati */
+.project-item {
+    font-weight: 500;
+    color: #0f172a !important;
+    margin-bottom: 3px;
+}
+
+/* SERTIFIKATLAR DIZAYNI - Tagma-tag va ixcham */
+.cert-gallery {
+    display: flex;
+    flex-direction: column; /* Sertifikatlarni tagma-tag joylashtiradi */
+    gap: 10px;             /* Rasmlar orasidagi masofa */
+    margin-top: 8px;
+}
+.cert-img {
+    max-width: 180px;      /* Sertifikat eni ixchamlashtirildi */
+    height: auto;
+    object-fit: contain;
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+/* Tugmalar dizayni */
+.lang-buttons {
+    text-align: center;
+    margin: 15px;
+}
+.lang-buttons button {
+    padding: 6px 14px;
+    margin: 0 4px;
+    border: 1px solid #cbd5e1;
+    background: #fff;
+    color: #334155;
+    cursor: pointer;
+    border-radius: 4px;
+    font-weight: 600;
+    transition: 0.2s;
+}
+.lang-buttons button:hover {
+    background: #38bdf8;
+    color: #fff;
+    border-color: #38bdf8;
+}
+.download {
+    text-align: center;
+    margin-bottom: 30px;
+}
+.download button {
+    padding: 12px 24px;
+    background: #0f172a;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.2);
+    transition: 0.2s;
+}
+.download button:hover {
+    background: #1e293b;
+    transform: translateY(-1px);
+}
+.small {
+    font-size: 13px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="lang-buttons">
+    <button onclick="switchLang('uz')">UZ</button>
+    <button onclick="switchLang('ru')">RU</button>
+    <button onclick="switchLang('en')">EN</button>
+</div>
+
+<div class="wrapper" id="cv">
+
+<!-- LEFT SIDEBAR -->
+<div class="left">
+    <div class="profile">
+        <img src="photo_2026-06-04_15-42-14.jpg" alt="Profile">
+        <h2>Farruxbek</h2>
+        <p>Frontend Developer</p>
+    </div>
+
+    <div class="section">
+        <h3 data-key="contact">Contact</h3>
+        <p><i class="bi bi-envelope-fill"></i> Farruxbek@gmail.com</p>
+        <p><i class="bi bi-telephone-fill"></i> +998 50 277 75 27</p>
+        <p><i class="bi bi-telegram"></i> @odilbekovfarruxbek</p>
+        <p><i class="bi bi-github"></i> github.com/Farruxbek23</p>
+        <p><i class="bi bi-geo-alt-fill"></i> Khiva, Uzbekistan</p>
+    </div>
+
+    <div class="section">
+        <h3 data-key="skills">Skills</h3>
+        <p><i class="bi bi-check-circle-fill"></i> HTML, CSS, JS</p>
+        <p><i class="bi bi-check-circle-fill"></i> Bootstrap, Tailwind</p>
+        <p><i class="bi bi-check-circle-fill"></i> React basics</p>
+    </div>
+
+    <div class="section">
+        <h3 data-key="langs">Languages</h3>
+        <p><i class="bi bi-translate"></i> Uzbek, Russian, English</p>
+    </div>
+</div>
+
+<!-- RIGHT CONTENT -->
+<div class="right">
+
+    <h1>Odilbekov Farruxbek</h1>
+
+    <div class="section">
+        <h3 data-key="profile">Profile</h3>
+        <p class="small" data-key="profileText"></p>
+    </div>
+
+    <div class="section">
+        <h3 data-key="exp">Experience</h3>
+        <p data-key="expText"></p>
+    </div>
+
+    <div class="section">
+        <h3 data-key="projects">Projects</h3>
+        <p class="project-item"><i class="bi bi-layer-forward" style="color: #38bdf8; margin-right: 5px;"></i> Mind Bridge Website</p>
+        <p class="project-item"><i class="bi bi-layer-forward" style="color: #38bdf8; margin-right: 5px;"></i> Lingua Bridge Website</p>
+    </div>
+
+    <div class="section">
+        <h3 data-key="edu">Education</h3>
+        <p data-key="eduText"></p>
+    </div>
+    
+    <!-- Sertifikatlar bo'limi yangilandi -->
+    <div class="section">
+        <h3 data-key="certificate">Sertifikatim</h3>
+        <div class="cert-gallery">
+            <!-- Birinchi sertifikat -->
+            <img class="cert-img" src="Снимок экрана 2026-06-02 120111.png" alt="Sertifikat 1">
+            <!-- Agar yana sertifikat bo'lsa, shunchaki tagidan yangi <img> qo'shib ketaverasiz -->
+        </div>
+    </div>
+</div>
+
+</div>
+
+<div class="download">
+    <button onclick="downloadPDF()">
+        <i class="bi bi-download"></i> Download PDF
+    </button>
+</div>
+
+<script>
+let currentLang = "uz";
+
+const translations = {
+uz:{
+    contact:"Aloqa",
+    skills:"Ko'nikmalar",
+    langs:"Tillar",
+    profile:"Profil",
+    exp:"Tajriba",
+    projects:"Loyihalar",
+    edu:"Ta'lim",
+    certificate:"Sertifikatim",
+    profileText:"Frontend Developer zamonaviy veb-saytlar yaratadi. HTML, CSS, JS va UI dizaynda tajribaga ega.",
+    expText:"Freelance loyihalar ustida 1+ yil ishlagan. Responsive saytlar yaratish tajribasi bor.",
+    eduText:"Hozirda o'rta ta'lim va mustaqil ravishda frontend yo'nalishini o'rganish."
+},
+ru:{
+    contact:"Контакты",
+    skills:"Навыки",
+    langs:"Языки",
+    profile:"Профиль",
+    exp:"Опыт",
+    projects:"Проекты",
+    edu:"Образование",
+    certificate:"Мой сертификат",
+    profileText:"Frontend разработчик, создающий современные веб-интерфейсы. Имеет опыт в HTML, CSS, JS и UI дизайне.",
+    expText:"Более 1 года опыта во фрилансе и веб-проектах. Опыт создания адаптивных сайтов.",
+    eduText:"Среднее образование + самостоятельное обучение frontend разработке."
+},
+en:{
+    contact:"Contact",
+    skills:"Skills",
+    langs:"Languages",
+    profile:"Profile",
+    exp:"Experience",
+    projects:"Projects",
+    edu:"Education",
+    certificate:"My Certificate",
+    profileText:"Frontend developer building modern responsive web applications. Experienced in HTML, CSS, JS, and UI design.",
+    expText:"1+ year of experience in freelance web development. Professional creation of responsive layouts.",
+    eduText:"Secondary education + self-learning frontend development."
+}
+};
+
+function switchLang(lang){
+    currentLang = lang;
+    const data = translations[lang];
+
+    document.querySelectorAll("[data-key]").forEach(el=>{
+        el.innerText = data[el.getAttribute("data-key")];
+    });
+}
+
+function downloadPDF(){
+    let name = "CV.pdf";
+    if(currentLang==="uz") name="Farruxbek_CV_UZ.pdf";
+    if(currentLang==="ru") name="Farruxbek_CV_RU.pdf";
+    if(currentLang==="en") name="Farruxbek_CV_EN.pdf";
+
+    const element = document.getElementById("cv");
+    
+    const opt = {
+        margin: 0,
+        filename: name,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { 
+            scale: 2, 
+            useCORS: true, 
+            scrollY: 0,
+            scrollX: 0
+        },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+
+    html2pdf().set(opt).from(element).save();
+}
+
+switchLang("uz");
+</script>
+
+</body>
+</html>

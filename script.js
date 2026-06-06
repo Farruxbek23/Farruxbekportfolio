@@ -50,6 +50,7 @@ window.addEventListener("scroll", () => {
 const header = document.querySelector("header");
 
 window.addEventListener("scroll", () => {
+    if (!header) return;
     if (window.scrollY > 50) {
         header.style.background = "rgba(15,23,42,0.95)";
         header.style.boxShadow = "0 5px 20px rgba(0,0,0,0.3)";
@@ -117,7 +118,7 @@ if (form) {
 }
 
 /* =========================
-   SCROLL ANIMATION
+   SCROLL_ANIMATION
 ========================= */
 
 const observer = new IntersectionObserver((entries) => {
@@ -141,77 +142,184 @@ document.querySelectorAll(
 });
 
 /* =========================
-   ALISA AI (3 TILDA GAPIRADI)
+   PROJECTS RENDER
+========================= */
+
+function renderProjects() {
+    let container = document.getElementById("projectContainer");
+    if (!container) return;
+
+    if (typeof getProjects !== "function") return;
+    
+    let projects = getProjects();
+    container.innerHTML = "";
+
+    projects.forEach(p => {
+        container.innerHTML += `
+        <div class="project-card">
+            <img src="${p.image}">
+            <h3>${p.title}</h3>
+            <p>${p.desc}</p>
+            <div class="buttons">
+                <a href="${p.link}" target="_blank" class="btn">
+                    Live Demo
+                </a>
+            </div>
+        </div>
+        `;
+    });
+}
+
+renderProjects();
+
+/* =========================
+   ALISA AI PREMIUM (UZ -> RU -> EN KETMA-KETLIKDA)
 ========================= */
 
 const alisaTexts = [
-`Salom! Men Odilbekov Farruxbek.
-Men 14 yoshli Frontend Developer man.
-HTML, CSS, JavaScript va Bootstrap o‘rganayapman.
-Maqsadim Full Stack Developer bo‘lish.`,
+// 1. O'ZBEKCHA MATN (speechIndex = 0)
+`Ассалому алайкум. 
+Мен Фаррухбекнинг виртуал йордамчисиман. 
+Сиз ҳозир Одилбеков Фаррухбекнинг портфолио сайтидасиз. 
+Фаррухбек Ўзбекистонда яшовчи ёш фронтенд дастурчи. 
+У ХТМЛ, ЦСС, ЯваСкрипт, Бутстрап, ГитХаб ва Реактехнологияларини ўрганмоқда. 
+У замонавий ва респонсив веб сайтлар яратишни яхши кўради. 
+Портфолио бўлимида унинг лойиҳалари, сертификатлари, тажрибаси ва ютуқлари билан танишганигиз мумкин. 
+Фаррухбекнинг мақсади келажакда кучли Фул Стэк Девелопер бўлиш. 
+Бўш вақтида янги технологиялар ўрганади, дизайнлар яратади ва дастурлаш билан шуғулланади. 
+Портфолио сайтига ташриф буюрганингиз учун раҳмат.`,
 
-`Здравствуйте! Меня зовут Одилбеков Фаррухбек.
-Мне 14 лет, я Frontend разработчик.
-Я изучаю HTML, CSS и JavaScript.
-Моя цель — стать Full Stack разработчиком.`,
+// 2. RUSCHA MATN (speechIndex = 1)
+`Здравствуйте. 
+Я виртуальный помощник Фаррухбека. 
+Вы находитесь на его персональном портфолио сайте. 
+Фаррухбек молодой Фронтенд разработчик из Узбекистана. 
+Он изучает ХТМЛ, ЦСС, ЯваСкрипт, Бутстрап и Реак. 
+Его цель стать профессиональным Фул Стэк разработчиком. 
+Спасибо за посещение сайта.`,
 
-`Hello! My name is Odilbekov Farruxbek.
-I am 14 years old Frontend Developer.
-I am learning HTML, CSS and JavaScript.
-My goal is to become Full Stack Developer.`
+// 3. INGLIZCHA MATN (speechIndex = 2)
+`Hello. 
+I am Farruxbek's virtual assistant. 
+You are visiting the personal portfolio website of Odilbekov Farruxbek. 
+He is a young Frontend Developer from Uzbekistan. 
+He works with HTML, CSS, JavaScript, Bootstrap, GitHub and React. 
+His goal is to become a professional Full Stack Developer. 
+Thank you for visiting his portfolio website.`
 ];
 
 let speechIndex = 0;
-let isSpeaking = false;
+let currentUtterance = null; 
 
-/* Speech voices */
-function getVoice(lang) {
+function getClearVoice(langCode) {
     const voices = speechSynthesis.getVoices();
-    return voices.find(v => v.lang.includes(lang)) || voices[0];
+    
+    if (langCode === "uz") {
+        // Kirill alifbosidagi o'zbekcha matnni o'qish uchun eng mos ovozlar
+        return voices.find(v => v.lang.toLowerCase().includes("uz-uz")) || 
+               voices.find(v => v.lang.toLowerCase().includes("ru-ru")) || 
+               voices[0];
+    }
+    
+    if (langCode === "ru") {
+        return voices.find(v => v.lang.toLowerCase().includes("ru-ru") && (v.name.includes("Google") || v.name.includes("Microsoft") || v.name.includes("Irina"))) || 
+               voices.find(v => v.lang.toLowerCase().includes("ru")) ||
+               voices[0];
+    }
+    
+    if (langCode === "en") {
+        return voices.find(v => v.lang.toLowerCase().includes("en-us") && (v.name.includes("Google") || v.name.includes("Zira") || v.name.includes("Natural"))) || 
+               voices.find(v => v.lang.toLowerCase().startsWith("en")) ||
+               voices[0];
+    }
+    
+    return voices[0];
 }
 
 function speakAlisa() {
-
     if (!("speechSynthesis" in window)) return;
 
-    const speech = new SpeechSynthesisUtterance(alisaTexts[speechIndex]);
+    // Har gal toza va yangidan gapirishni boshlashi uchun kensel qilamiz
+    speechSynthesis.cancel();
 
+    currentUtterance = new SpeechSynthesisUtterance(alisaTexts[speechIndex]);
+
+    // QAT'IY KETMA-KETLIK TIZIMI:
     if (speechIndex === 0) {
-        speech.lang = "uz-UZ";
-        speech.voice = getVoice("ru");
+        // Birinchi matn: O'zbekcha (Kirill bo'lgani uchun uz yoki ru tili modeli o'qiydi)
+        currentUtterance.lang = "ru-RU"; 
+        currentUtterance.voice = getClearVoice("uz"); 
+        currentUtterance.rate = 0.83; 
+    } else if (speechIndex === 1) {
+        // Ikkinchi matn: Sof Rus tili va ruscha ovoz
+        currentUtterance.lang = "ru-RU";
+        currentUtterance.voice = getClearVoice("ru");
+        currentUtterance.rate = 0.88;
+    } else if (speechIndex === 2) {
+        // Uchinchi matn: Sof Ingliz tili va inglizcha ovoz
+        currentUtterance.lang = "en-US";
+        currentUtterance.voice = getClearVoice("en"); 
+        currentUtterance.rate = 0.90; 
     }
 
-    if (speechIndex === 1) {
-        speech.lang = "ru-RU";
-        speech.voice = getVoice("ru");
-    }
+    currentUtterance.pitch = 1.05; 
+    currentUtterance.volume = 1;
 
-    if (speechIndex === 2) {
-        speech.lang = "en-US";
-        speech.voice = getVoice("en");
-    }
-
-    speech.rate = 1;
-
-    speech.onend = () => {
-        speechIndex++;
-
+    // Matn tugagach ishlaydigan hodisa
+    currentUtterance.onend = () => {
+        speechIndex++; // Keyingi matnga o'tish (0 edi -> 1 bo'ladi -> 2 bo'ladi)
         if (speechIndex < alisaTexts.length) {
-            setTimeout(speakAlisa, 800);
+            setTimeout(() => {
+                // Agar foydalanuvchi pauza tugmasini bosmagan bo'lsa, avtomatik keyingisiga o'tadi
+                if (!speechSynthesis.paused) {
+                    speakAlisa();
+                }
+            }, 1200); // Tillar orasidagi ideal tanaffus (1.2 soniya)
         } else {
-            speechIndex = 0;
+            resetAlisa(); // Hamma tillar tugasa, tizimni nollaydi
         }
     };
 
-    speechSynthesis.speak(speech);
+    currentUtterance.onerror = () => {
+        resetAlisa();
+    };
+
+    speechSynthesis.speak(currentUtterance);
+}
+
+function resetAlisa() {
+    speechIndex = 0;
+    currentUtterance = null;
+    if (alisaBtn) {
+        alisaBtn.classList.remove("speaking");
+    }
 }
 
 const alisaBtn = document.querySelector(".alisa");
 
 if (alisaBtn) {
     alisaBtn.addEventListener("click", () => {
-        speechSynthesis.cancel();
-        speechIndex = 0;
-        speakAlisa();
+        if (speechSynthesis.speaking) {
+            if (speechSynthesis.paused) {
+                speechSynthesis.resume();
+                alisaBtn.classList.add("speaking");
+            } else {
+                speechSynthesis.pause();
+                alisaBtn.classList.remove("speaking");
+            }
+        } else {
+            resetAlisa();
+            alisaBtn.classList.add("speaking");
+            speakAlisa();
+        }
     });
+}
+
+// Brauzer xotirasiga mos ovozlar to'liq yuklanganda ishga tushishi uchun korreksiya
+if (typeof speechSynthesis !== "undefined" && speechSynthesis.onvoiceschanged !== undefined) {
+    speechSynthesis.onvoiceschanged = () => {
+        getClearVoice("uz");
+        getClearVoice("ru");
+        getClearVoice("en");
+    };
 }
